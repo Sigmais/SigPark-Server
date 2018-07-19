@@ -19,6 +19,11 @@ sigpark.config 	= {
 	calibrate: 1
 };
 
+server.route('/')
+  .get(function(req, res) {
+  	res.json('SigPark Server 1.0');
+  })
+
 server.route('/sigfox/uplink')
   .get(function(req, res) {
   	var payload = new SigParkPayLoad(req.param('data'));
@@ -33,10 +38,14 @@ server.route('/sigfox/uplink')
   			} else {
   				console.log('SENSOR STATUS OCCUPIED');
   			}
+
+  			res.json({ });
   		break;
 
   		case 2: //KEEP_ALIVE
   			console.log('KEEP_ALIVE', data);
+
+  			res.json({ });
   		break;
 
   		default:
@@ -44,7 +53,7 @@ server.route('/sigfox/uplink')
   		break;
   	}
 
-  	res.json({ });    
+  	// res.json({ });    
   })
 
 server.route('/sigfox/downlink')
@@ -63,7 +72,7 @@ server.route('/sigfox/downlink')
   		break; 
 
   		case 3: //CONFIG_REPORT_FRAME
-  			console.log('CONFIG_REPORT_FRAME', payload.getDownlinkData());
+  			console.log('CONFIG_REPORT_FRAME', payload.getDownlinkData(), payload.getDataMessage());
   			result[device].downlinkData = payload.getDownlinkPayload();
   		break;
 
